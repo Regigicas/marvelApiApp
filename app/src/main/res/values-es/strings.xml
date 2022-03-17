@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MarvelApiApp</string>
+    <string name="loading_text_content">Cargando, por favor espere</string>
+    <string name="title_list_of_characters">Listado de personajes</string>
+    <string name="debug_build_text">Debug Build</string>
+    <string name="error_try_again">Ha ocurrido un error, inténtelo de nuevo más tarde</string>
+    <string name="understood">Entendido</string>
+    <string name="error_try_again_button">Reintentar</string>
+    <string name="section_comics">Comics</string>
+    <string name="section_stories">Historias</string>
+    <string name="section_events">Eventos</string>
+    <string name="section_series">Series</string>
+</resources>

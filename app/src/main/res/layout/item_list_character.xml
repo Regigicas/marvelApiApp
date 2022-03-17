@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="itemData"
+            type="com.example.common.characters.CharacterInfo" />
+        <variable
+            name="listener"
+            type="com.example.marvelapiapp.view.characters.listener.CharacterItemListener" />
+        <import type="com.example.common.characters.thumbnail.ThumbnailAspectRatio"/>
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardElevation="@dimen/default_card_elevation"
+        app:cardMaxElevation="@dimen/default_card_elevation"
+        app:cardCornerRadius="@dimen/default_corner_radius"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        android:layout_marginStart="@dimen/character_item_card_margin"
+        android:layout_marginEnd="@dimen/character_item_card_margin"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> listener.onCharacterClicked(itemData)}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/characterImageView"
+                android:layout_width="@dimen/character_item_image_width"
+                android:layout_height="@dimen/character_item_image_height"
+                android:adjustViewBounds="true"
+                app:imageUrl="@{itemData.thumbnail}"
+                app:imageRatio="@{ThumbnailAspectRatio.LANDSCAPE_LARGE}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/characterImageView"
+                android:text="@{itemData.name}"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/character_item_name_margin_start"
+                tools:text="Nombre" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

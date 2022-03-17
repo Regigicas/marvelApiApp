@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.marvelapiapp.viewmodel.characters.CharactersViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundDefault">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/debugIndicatorCardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/characters_debug_card_margin_start"
+            android:layout_marginBottom="@dimen/characters_debug_card_margin_bottom"
+            app:cardElevation="@dimen/default_card_elevation"
+            app:cardMaxElevation="@dimen/default_card_elevation"
+            app:cardCornerRadius="@dimen/characters_debug_card_radius"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/debugBackground"
+            app:visible="@{viewModel.isDebugBuild}">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:paddingTop="@dimen/characters_debug_text_margin_top_bottom"
+                android:paddingBottom="@dimen/characters_debug_text_margin_top_bottom"
+                android:paddingStart="@dimen/characters_debug_text_margin_start_end"
+                android:paddingEnd="@dimen/characters_debug_text_margin_start_end"
+                android:gravity="center"
+                android:text="@string/debug_build_text" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:refreshListener="@{() -> viewModel.refreshData()}"
+            app:isRefreshing="@{viewModel.isRefreshing}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/charactersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                tools:listitem="@layout/item_list_character"
+                tools:itemCount="4"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <include android:id="@+id/loadingLayout"
+            layout="@layout/loading_layout"
+            app:visible="@{viewModel.isLoading}"
+            tools:visibility="gone"/>
+
+        <include android:id="@+id/errorLayout"
+            layout="@layout/fragment_characters_layout_error"
+            app:visible="@{viewModel.errorVisible}"
+            tools:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

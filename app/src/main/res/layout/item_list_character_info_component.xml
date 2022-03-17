@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="title"
+            type="String" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/default_corner_radius"
+        app:cardElevation="@dimen/default_card_elevation"
+        app:cardMaxElevation="@dimen/default_card_elevation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/sectionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/character_info_component_margin_top"
+                android:paddingStart="@dimen/character_info_component_margin_start"
+                android:paddingEnd="@dimen/character_info_component_margin_end"
+                android:textStyle="bold"
+                android:text="@{title}"
+                tools:text="Prueba"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sectionRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sectionTextView"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="@dimen/default_corner_radius"
+                tools:listitem="@layout/item_list_character_info_section"
+                tools:itemCount="4"/>
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

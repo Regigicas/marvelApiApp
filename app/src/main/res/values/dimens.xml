@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_corner_radius">6dp</dimen>
+    <dimen name="default_card_elevation">3dp</dimen>
+
+    <dimen name="actionbar_button_size">20dp</dimen>
+    <dimen name="actionbar_back_margin_start">8dp</dimen>
+
+    <dimen name="overlay_error_text_size">18sp</dimen>
+    <dimen name="overlay_error_button_margin">20dp</dimen>
+    <dimen name="overlay_error_image_size">200dp</dimen>
+
+    <dimen name="character_info_section_margin_start">32dp</dimen>
+    <dimen name="character_info_section_margin_end">8dp</dimen>
+
+    <dimen name="character_info_component_margin_top">4dp</dimen>
+    <dimen name="character_info_component_margin_start">16dp</dimen>
+    <dimen name="character_info_component_margin_end">8dp</dimen>
+
+    <dimen name="characters_error_button_margin_top">12dp</dimen>
+
+    <dimen name="character_item_card_margin">14dp</dimen>
+    <dimen name="character_item_name_margin_start">8dp</dimen>
+    <dimen name="character_item_image_width">120dp</dimen>
+    <dimen name="character_item_image_height">70dp</dimen>
+
+    <dimen name="characters_debug_text_margin_start_end">40dp</dimen>
+    <dimen name="characters_debug_text_margin_top_bottom">10dp</dimen>
+    <dimen name="characters_debug_card_radius">20dp</dimen>
+    <dimen name="characters_debug_card_margin_start">20dp</dimen>
+    <dimen name="characters_debug_card_margin_bottom">10dp</dimen>
+
+    <dimen name="character_info_image_size">300dp</dimen>
+    <dimen name="character_info_list_margin_bottom">8dp</dimen>
+    <dimen name="character_info_card_margin">16dp</dimen>
+    <dimen name="character_info_desc_title_margin_start_end">16dp</dimen>
+    <dimen name="character_info_desc_title_margin_top_bottom">8dp</dimen>
+</resources>

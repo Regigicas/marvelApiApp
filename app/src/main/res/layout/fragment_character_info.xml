@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.marvelapiapp.viewmodel.characterInfo.CharacterInfoViewModel" />
+        <import type="com.example.common.characters.thumbnail.ThumbnailAspectRatio"/>
+        <import type="com.example.marvelapiapp.util.EmptyOrNull"/>
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_marginBottom="@dimen/character_info_list_margin_bottom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundDefault">
+
+            <!-- Image Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/characterImageCardView"
+                android:layout_width="@dimen/character_info_image_size"
+                android:layout_height="@dimen/character_info_image_size"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="@dimen/default_corner_radius"
+                app:cardElevation="@dimen/default_card_elevation"
+                app:cardMaxElevation="@dimen/default_card_elevation">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:layout_gravity="center"
+                    app:imageUrl="@{viewModel.characterData.thumbnail}"
+                    app:imageRatio="@{ThumbnailAspectRatio.STANDARD_XLARGE}"/>
+
+            </androidx.cardview.widget.CardView>
+            <!-- Image Section End -->
+
+            <!-- Description Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/descriptionCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="@dimen/default_corner_radius"
+                app:cardElevation="@dimen/default_card_elevation"
+                app:cardMaxElevation="@dimen/default_card_elevation"
+                android:layout_marginStart="@dimen/character_info_card_margin"
+                android:layout_marginEnd="@dimen/character_info_card_margin"
+                app:layout_constraintTop_toBottomOf="@id/characterImageCardView"
+                app:visible="@{EmptyOrNull.checkStringNotEmpty(viewModel.characterData.description)}">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/character_info_desc_title_margin_start_end"
+                    android:paddingEnd="@dimen/character_info_desc_title_margin_start_end"
+                    android:paddingTop="@dimen/character_info_desc_title_margin_top_bottom"
+                    android:paddingBottom="@dimen/character_info_desc_title_margin_top_bottom"
+                    android:text="@{viewModel.characterData.description}"
+                    tools:text="My long description"/>
+
+            </androidx.cardview.widget.CardView>
+            <!-- Description Section End -->
+
+            <include
+                android:id="@+id/comicsCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_list_character_info_component"
+                android:layout_marginStart="@dimen/character_info_card_margin"
+                android:layout_marginEnd="@dimen/character_info_card_margin"
+                app:layout_constraintTop_toBottomOf="@id/descriptionCardView"
+                app:title="@{@string/section_comics}"
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.comics.items)}" />
+
+            <include
+                android:id="@+id/storiesCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_list_character_info_component"
+                android:layout_marginStart="@dimen/character_info_card_margin"
+                android:layout_marginEnd="@dimen/character_info_card_margin"
+                app:layout_constraintTop_toBottomOf="@id/comicsCardView"
+                app:title="@{@string/section_stories}"
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.stories.items)}" />
+
+            <include
+                android:id="@+id/eventsCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_list_character_info_component"
+                android:layout_marginStart="@dimen/character_info_card_margin"
+                android:layout_marginEnd="@dimen/character_info_card_margin"
+                app:layout_constraintTop_toBottomOf="@id/storiesCardView"
+                app:title="@{@string/section_events}"
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.events.items)}" />
+
+            <include
+                android:id="@+id/seriesCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_list_character_info_component"
+                android:layout_marginStart="@dimen/character_info_card_margin"
+                android:layout_marginEnd="@dimen/character_info_card_margin"
+                app:layout_constraintTop_toBottomOf="@id/eventsCardView"
+                app:title="@{@string/section_series}"
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.series.items)}" />
+
+            <include android:id="@+id/loadingLayout"
+                layout="@layout/loading_layout"
+                app:visible="@{viewModel.isLoading}"
+                tools:visibility="gone"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
