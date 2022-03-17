@@ -9,3 +9,5 @@ Prueba técnica realizada para Openbank utilizando las siguientes tecnologías:
 - Modulos independientes para los sistemas de network, database y la aplicación en sí.
 - Picasso para la carga de imagenes.
 - Extensiones de vista para facilitar la programación.
+
+Las claves de la API de Marvel se encuentran en la carpeta conf del directorio raíz, en blanco por defecto.
