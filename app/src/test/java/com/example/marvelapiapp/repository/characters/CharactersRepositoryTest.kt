@@ -2,10 +2,8 @@ package com.example.marvelapiapp.repository.characters
 
 import com.example.common.characters.CharacterData
 import com.example.common.characters.CharacterResponse
-import com.example.database.dao.CharacterDao
+import com.example.data.datasource.database.dao.CharacterDao
 import com.example.marvelapiapp.base.BaseTest
-import com.example.marvelapiapp.constant.CharacterInfoRequest
-import com.example.marvelapiapp.constant.CharactersRequest
 import com.example.marvelapiapp.repository.base.ResponseType
 import com.example.network.characters.CharacterServiceImpl
 import io.mockk.coEvery

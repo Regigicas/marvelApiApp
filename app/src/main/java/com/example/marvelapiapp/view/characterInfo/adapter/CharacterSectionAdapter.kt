@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.common.characters.BaseCharacterParamInfo
+import com.example.domain.model.character.CharacterParamInfo
 import com.example.marvelapiapp.databinding.ItemListCharacterInfoSectionBinding
 
-class CharacterSectionAdapter(private var items: List<BaseCharacterParamInfo>)
+class CharacterSectionAdapter(private var items: List<CharacterParamInfo>)
     : RecyclerView.Adapter<CharacterSectionAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +23,7 @@ class CharacterSectionAdapter(private var items: List<BaseCharacterParamInfo>)
     override fun getItemCount(): Int = items.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(newData: List<BaseCharacterParamInfo>) {
+    fun setData(newData: List<CharacterParamInfo>) {
         items = newData
         notifyDataSetChanged()
     }
@@ -31,8 +31,8 @@ class CharacterSectionAdapter(private var items: List<BaseCharacterParamInfo>)
     inner class ViewHolder(private val binding: ItemListCharacterInfoSectionBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(info: BaseCharacterParamInfo) {
-            binding.name = info.getInfoName()
+        fun bind(info: CharacterParamInfo) {
+            binding.paramInfo = info
         }
     }
 }

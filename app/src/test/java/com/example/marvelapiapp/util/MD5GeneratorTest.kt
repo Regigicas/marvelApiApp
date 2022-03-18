@@ -1,5 +1,6 @@
 package com.example.marvelapiapp.util
 
+import com.example.data.util.MD5Generator
 import com.example.marvelapiapp.base.BaseTest
 import org.junit.Assert
 import org.junit.Test

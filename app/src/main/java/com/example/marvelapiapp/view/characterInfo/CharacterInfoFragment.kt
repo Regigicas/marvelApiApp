@@ -9,14 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.common.characters.BaseCharacterParamInfo
-import com.example.common.characters.CharacterInfo
-import com.example.marvelapiapp.MainActivity
+import com.example.domain.model.character.CharacterInfo
+import com.example.domain.model.character.CharacterParamInfo
+import com.example.domain.model.response.UseCaseResponseStatus
+import com.example.marvelapiapp.view.MainActivity
 import com.example.marvelapiapp.R
 import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.databinding.FragmentCharacterInfoBinding
 import com.example.marvelapiapp.navigation.NavigationManager
-import com.example.marvelapiapp.repository.base.ResponseType
 import com.example.marvelapiapp.view.base.BaseFragment
 import com.example.marvelapiapp.view.characterInfo.adapter.CharacterSectionAdapter
 import com.example.marvelapiapp.viewmodel.characterInfo.CharacterInfoViewModel
@@ -24,9 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class CharacterInfoFragment : BaseFragment() {
+class CharacterInfoFragment : BaseFragment<FragmentCharacterInfoBinding>() {
     private val viewModel: CharacterInfoViewModel by viewModels()
-    private lateinit var binding: FragmentCharacterInfoBinding
     private val adapterList = mutableListOf<CharacterSectionAdapter?>(null, null, null, null)
 
     override fun getViewModel(): ViewModel = viewModel
@@ -37,7 +36,7 @@ class CharacterInfoFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCharacterInfoBinding.inflate(inflater, container, false)
+        setBinding(FragmentCharacterInfoBinding.inflate(inflater, container, false))
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -47,7 +46,7 @@ class CharacterInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as? MainActivity)?.setToolbarBackButtonVisible(true)
         initViews()
-        val argumentData = arguments?.getSerializable(CharactersConstant.CHARACTER_INFO_KEY) as? CharacterInfo
+        val argumentData = arguments?.getParcelable(CharactersConstant.CHARACTER_INFO_KEY) as? CharacterInfo
         if (argumentData != null) {
             handleServiceData(argumentData)
         } else {
@@ -61,9 +60,9 @@ class CharacterInfoFragment : BaseFragment() {
             viewModel.requestCharacterData(requestedId)
             lifecycleScope.launchWhenStarted {
                 viewModel.getCharacterState().collect {
-                    when (it.type) {
-                        ResponseType.OK -> { handleServiceData(it.data) }
-                        ResponseType.ERROR -> { handleServiceError() }
+                    when (it.status) {
+                        UseCaseResponseStatus.OK -> { handleServiceData(it.data) }
+                        UseCaseResponseStatus.ERROR -> { handleServiceError() }
                         else -> {}
                     }
                 }
@@ -83,10 +82,10 @@ class CharacterInfoFragment : BaseFragment() {
             (activity as? MainActivity)?.setToolbarTitle(
                 resources.getString(R.string.title_character_info, charData.name))
             viewModel.setCharacterData(charData)
-            setDataForAdapter(AdapterId.COMICS, charData.comics?.items)
-            setDataForAdapter(AdapterId.STORIES, charData.stories?.items)
-            setDataForAdapter(AdapterId.EVENTS, charData.events?.items)
-            setDataForAdapter(AdapterId.SERIES, charData.series?.items)
+            setDataForAdapter(AdapterId.COMICS, charData.comics)
+            setDataForAdapter(AdapterId.STORIES, charData.stories)
+            setDataForAdapter(AdapterId.EVENTS, charData.events)
+            setDataForAdapter(AdapterId.SERIES, charData.series)
         }
     }
 
@@ -115,7 +114,7 @@ class CharacterInfoFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun setDataForAdapter(adapterId: AdapterId, data: List<BaseCharacterParamInfo>?) {
+    private fun setDataForAdapter(adapterId: AdapterId, data: List<CharacterParamInfo>?) {
         data?.let {
             adapterList[adapterId.ordinal]?.setData(it)
         }

@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="name"
-            type="String" />
+            name="paramInfo"
+            type="com.example.domain.model.character.CharacterParamInfo" />
     </data>
 
     <FrameLayout
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/character_info_section_margin_start"
             android:paddingEnd="@dimen/character_info_section_margin_end"
-            android:text="@{String.format(@string/character_info_element(name))}"
+            android:text="@{String.format(@string/character_info_element(paramInfo.name))}"
             tools:text="Nombre del recurso" />
 
     </FrameLayout>

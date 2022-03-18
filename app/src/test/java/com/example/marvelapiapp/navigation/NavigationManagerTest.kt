@@ -1,6 +1,6 @@
 package com.example.marvelapiapp.navigation
 
-import com.example.marvelapiapp.MainActivity
+import com.example.marvelapiapp.view.MainActivity
 import com.example.marvelapiapp.base.BaseTest
 import com.example.marvelapiapp.view.characterInfo.CharacterInfoFragment
 import com.example.marvelapiapp.view.characters.CharactersFragment

@@ -1,50 +1,54 @@
 package com.example.marvelapiapp.viewmodel.characters
 
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.character.CharacterInfo
+import com.example.domain.model.response.UseCaseResponse
+import com.example.domain.usecase.character.list.GetCharactersModel
+import com.example.domain.usecase.character.list.GetCharactersUseCase
 import com.example.marvelapiapp.BuildConfig
-import com.example.marvelapiapp.constant.CharactersRequest
 import com.example.marvelapiapp.constant.CharactersConstant
+import com.example.marvelapiapp.databinding.setError
+import com.example.marvelapiapp.databinding.setFrom
 import com.example.marvelapiapp.databinding.setLoading
 import com.example.marvelapiapp.navigation.NavigationManager
-import com.example.marvelapiapp.repository.base.ResponseType
-import com.example.marvelapiapp.repository.base.response.BaseResponse
-import com.example.marvelapiapp.repository.characters.CharactersRepository
 import com.example.marvelapiapp.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel
-    @Inject constructor(private val repository: CharactersRepository)
-        : BaseViewModel(), ICharactersViewModel {
+    @Inject constructor(
+            private val getCharactersUseCase: GetCharactersUseCase
+        ) : BaseViewModel() {
 
-    private val charactersFlow = MutableStateFlow<
-            CharactersRequest>(BaseResponse(ResponseType.NOT_STARTED, null, null))
+    private val charactersFlow = MutableStateFlow(
+        UseCaseResponse.notStarted<List<CharacterInfo>>())
 
     private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
+    val isLoading get() = _isLoading.asStateFlow()
 
     val isDebugBuild: StateFlow<Boolean> = MutableStateFlow(BuildConfig.DEBUG)
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing
+    val isRefreshing get() = _isRefreshing.asStateFlow()
 
     private val _errorVisible = MutableStateFlow(false)
-    val errorVisible: StateFlow<Boolean> get() = _errorVisible
+    val errorVisible get() = _errorVisible.asStateFlow()
 
     private var currentOffset = 0
     private var needsDataReset = false
 
-    override fun collectCharacters() {
+    fun collectCharacters() {
         launchCollector(true)
     }
 
-    override fun getCharactersState(): StateFlow<CharactersRequest> = charactersFlow
+    fun getCharactersState(): StateFlow<UseCaseResponse<List<CharacterInfo>>> = charactersFlow
 
-    override fun loadMoreCharacters() {
+    fun loadMoreCharacters() {
         if (_isLoading.value || _isRefreshing.value) {
             return
         }
@@ -52,7 +56,7 @@ class CharactersViewModel
         launchCollector(false)
     }
 
-    override fun handleServiceError(hasData: Boolean) {
+    fun handleServiceError(hasData: Boolean) {
         if (hasData) {
             NavigationManager.showErrorOverlay()
         } else {
@@ -60,7 +64,7 @@ class CharactersViewModel
         }
     }
 
-    override fun refreshData() {
+    fun refreshData() {
         _errorVisible.value = false
         _isRefreshing.value = true
         needsDataReset = true
@@ -68,7 +72,7 @@ class CharactersViewModel
         _isRefreshing.value = false
     }
 
-    override fun checkDataResetAndClear(): Boolean {
+    fun checkDataResetAndClear(): Boolean {
         val result = needsDataReset
         needsDataReset = false
         return result
@@ -82,13 +86,19 @@ class CharactersViewModel
         _isLoading.value = true
         charactersFlow.setLoading()
         viewModelScope.launch {
-            repository.runCharactersCollector(charactersFlow,
-                CharactersConstant.CHARACTERS_LIMIT, currentOffset)
-            currentOffset += CharactersConstant.OFFSET_PER_PAGE
+            getCharactersUseCase.execute(
+                GetCharactersModel(CharactersConstant.CHARACTERS_LIMIT, currentOffset), {
+                    notifyLoadFinished()
+                    charactersFlow.setFrom(it)
+                    currentOffset += CharactersConstant.OFFSET_PER_PAGE
+                }, {
+                    notifyLoadFinished()
+                    charactersFlow.setError(it)
+                })
         }
     }
 
-    override fun notifyLoadFinished() {
+    fun notifyLoadFinished() {
         _isLoading.value = false
     }
 }

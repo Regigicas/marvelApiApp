@@ -4,8 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.common.characters.thumbnail.CharacterThumbnail
-import com.example.common.characters.thumbnail.ThumbnailAspectRatio
+import com.example.domain.constant.ThumbnailAspectRatio
 import com.example.marvelapiapp.R
 import com.squareup.picasso.Picasso
 
@@ -20,15 +19,10 @@ fun View.bindVisible(visible: Boolean) {
 
 @BindingAdapter("imageUrl", "imageRatio")
 fun ImageView.bindThumbnail(
-    imageUrl: CharacterThumbnail,
+    imageUrl: String,
     imageRatio: ThumbnailAspectRatio
 ) {
-    var urlPath = imageUrl.path
-    urlPath?.let {
-        if (!it.contains("https")) // The api seems to return http instead of https
-            urlPath = it.replace("http", "https")
-    }
-    val url = "${urlPath}/${imageRatio.toApiName()}.${imageUrl.extension}"
+    val url = String.format(imageUrl, imageRatio.lowerCase())
     Picasso.get()
         .load(url)
         .fit()

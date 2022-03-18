@@ -6,14 +6,14 @@ import com.example.marvelapiapp.viewmodel.base.BaseViewModel
 import javax.inject.Inject
 
 class FullErrorViewModel
-    @Inject constructor() : BaseViewModel(), IFullErrorViewModel {
+    @Inject constructor() : BaseViewModel() {
     private lateinit var listener: SimpleButtonClickListener
 
-    override fun setCloseButtonListener(ls: SimpleButtonClickListener) {
+    fun setCloseButtonListener(ls: SimpleButtonClickListener) {
         listener = ls
     }
 
-    override fun handleCloseButton(view: View) {
+    fun handleCloseButton(view: View) {
         listener.onButtonClicked(view)
     }
 }

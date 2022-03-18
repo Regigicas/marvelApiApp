@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.common.characters.CharacterInfo
+import com.example.domain.model.character.CharacterInfo
 import com.example.marvelapiapp.databinding.ItemListCharacterBinding
 import com.example.marvelapiapp.view.characters.listener.CharacterItemListener
 

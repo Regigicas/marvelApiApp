@@ -7,7 +7,7 @@
         <variable
             name="viewModel"
             type="com.example.marvelapiapp.viewmodel.characterInfo.CharacterInfoViewModel" />
-        <import type="com.example.common.characters.thumbnail.ThumbnailAspectRatio"/>
+        <import type="com.example.domain.constant.ThumbnailAspectRatio"/>
         <import type="com.example.marvelapiapp.util.EmptyOrNull"/>
     </data>
 
@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:layout_gravity="center"
-                    app:imageUrl="@{viewModel.characterData.thumbnail}"
+                    app:imageUrl="@{viewModel.characterData.imageUrl}"
                     app:imageRatio="@{ThumbnailAspectRatio.STANDARD_XLARGE}"/>
 
             </androidx.cardview.widget.CardView>
@@ -84,7 +84,7 @@
                 android:layout_marginEnd="@dimen/character_info_card_margin"
                 app:layout_constraintTop_toBottomOf="@id/descriptionCardView"
                 app:title="@{@string/section_comics}"
-                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.comics.items)}" />
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.comics)}" />
 
             <include
                 android:id="@+id/storiesCardView"
@@ -95,7 +95,7 @@
                 android:layout_marginEnd="@dimen/character_info_card_margin"
                 app:layout_constraintTop_toBottomOf="@id/comicsCardView"
                 app:title="@{@string/section_stories}"
-                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.stories.items)}" />
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.stories)}" />
 
             <include
                 android:id="@+id/eventsCardView"
@@ -106,7 +106,7 @@
                 android:layout_marginEnd="@dimen/character_info_card_margin"
                 app:layout_constraintTop_toBottomOf="@id/storiesCardView"
                 app:title="@{@string/section_events}"
-                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.events.items)}" />
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.events)}" />
 
             <include
                 android:id="@+id/seriesCardView"
@@ -117,7 +117,7 @@
                 android:layout_marginEnd="@dimen/character_info_card_margin"
                 app:layout_constraintTop_toBottomOf="@id/eventsCardView"
                 app:title="@{@string/section_series}"
-                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.series.items)}" />
+                app:visible="@{EmptyOrNull.checkListHasData(viewModel.characterData.series)}" />
 
             <include android:id="@+id/loadingLayout"
                 layout="@layout/loading_layout"

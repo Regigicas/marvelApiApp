@@ -10,14 +10,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.common.characters.CharacterInfo
-import com.example.marvelapiapp.MainActivity
+import com.example.domain.model.character.CharacterInfo
+import com.example.domain.model.response.UseCaseResponseStatus
+import com.example.marvelapiapp.view.MainActivity
 import com.example.marvelapiapp.R
 import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.databinding.FragmentCharactersLayoutBinding
 import com.example.marvelapiapp.databinding.canRequestMoreData
 import com.example.marvelapiapp.navigation.NavigationManager
-import com.example.marvelapiapp.repository.base.ResponseType
 import com.example.marvelapiapp.view.base.BaseFragment
 import com.example.marvelapiapp.view.characters.adapter.CharactersAdapter
 import com.example.marvelapiapp.view.characters.listener.CharacterItemListener
@@ -27,9 +27,8 @@ import kotlinx.coroutines.flow.collect
 import java.io.Serializable
 
 @AndroidEntryPoint
-class CharactersFragment : BaseFragment(), CharacterItemListener {
+class CharactersFragment : BaseFragment<FragmentCharactersLayoutBinding>(), CharacterItemListener {
     private val viewModel: CharactersViewModel by viewModels()
-    private lateinit var binding: FragmentCharactersLayoutBinding
     private lateinit var adapter: CharactersAdapter
     private lateinit var linearManager: LinearLayoutManager
     private var canLoadMoreData = true
@@ -47,7 +46,7 @@ class CharactersFragment : BaseFragment(), CharacterItemListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCharactersLayoutBinding.inflate(inflater, container, false)
+        setBinding(FragmentCharactersLayoutBinding.inflate(inflater, container, false))
         binding.viewModel = viewModel
         binding.errorLayout.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -133,9 +132,9 @@ class CharactersFragment : BaseFragment(), CharacterItemListener {
 
         lifecycleScope.launchWhenStarted {
             viewModel.getCharactersState().collect {
-                when (it.type) {
-                    ResponseType.OK -> { updateAdapterData(it.data) }
-                    ResponseType.ERROR -> { handleServiceError() }
+                when (it.status) {
+                    UseCaseResponseStatus.OK -> { updateAdapterData(it.data) }
+                    UseCaseResponseStatus.ERROR -> { handleServiceError() }
                     else -> {}
                 }
             }

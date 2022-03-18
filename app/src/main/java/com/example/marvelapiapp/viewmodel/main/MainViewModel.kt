@@ -4,30 +4,30 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import com.example.marvelapiapp.databinding.SimpleButtonClickListener
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class MainViewModel : ViewModel(), IMainViewModel {
+class MainViewModel : ViewModel() {
     private lateinit var listener: SimpleButtonClickListener
 
     private val _titleText = MutableStateFlow("")
-    val titleText: StateFlow<String> get() = _titleText
+    val titleText get() = _titleText.asStateFlow()
 
     private val _backVisible = MutableStateFlow(false)
-    val backVisible: StateFlow<Boolean> get() = _backVisible
+    val backVisible get() = _backVisible.asStateFlow()
 
-    override fun setTitleText(text: String) {
+    fun setTitleText(text: String) {
         _titleText.value = text
     }
 
-    override fun setBackButtonVisible(apply: Boolean) {
+    fun setBackButtonVisible(apply: Boolean) {
         _backVisible.value = apply
     }
 
-    override fun onActionBarButtonClicked(view: View) {
+    fun onActionBarButtonClicked(view: View) {
         listener.onButtonClicked(view)
     }
 
-    override fun setActionBarBackListener(ls: SimpleButtonClickListener) {
+    fun setActionBarBackListener(ls: SimpleButtonClickListener) {
         listener = ls
     }
 }

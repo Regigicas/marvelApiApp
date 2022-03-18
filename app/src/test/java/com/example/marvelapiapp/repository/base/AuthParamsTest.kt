@@ -1,7 +1,7 @@
 package com.example.marvelapiapp.repository.base
 
 import com.example.marvelapiapp.base.BaseTest
-import com.example.marvelapiapp.util.MD5Generator
+import com.example.data.util.MD5Generator
 import io.mockk.mockkObject
 import io.mockk.verify
 import org.junit.Test

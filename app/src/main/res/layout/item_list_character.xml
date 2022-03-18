@@ -6,11 +6,11 @@
     <data>
         <variable
             name="itemData"
-            type="com.example.common.characters.CharacterInfo" />
+            type="com.example.domain.model.character.CharacterInfo" />
         <variable
             name="listener"
             type="com.example.marvelapiapp.view.characters.listener.CharacterItemListener" />
-        <import type="com.example.common.characters.thumbnail.ThumbnailAspectRatio"/>
+        <import type="com.example.domain.constant.ThumbnailAspectRatio"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -40,7 +40,7 @@
                 android:layout_width="@dimen/character_item_image_width"
                 android:layout_height="@dimen/character_item_image_height"
                 android:adjustViewBounds="true"
-                app:imageUrl="@{itemData.thumbnail}"
+                app:imageUrl="@{itemData.imageUrl}"
                 app:imageRatio="@{ThumbnailAspectRatio.LANDSCAPE_LARGE}" />
 
             <androidx.appcompat.widget.AppCompatTextView

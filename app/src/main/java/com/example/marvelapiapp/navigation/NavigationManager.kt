@@ -3,8 +3,8 @@ package com.example.marvelapiapp.navigation
 import android.content.Intent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.example.common.characters.CharacterInfo
-import com.example.marvelapiapp.MainActivity
+import com.example.domain.model.character.CharacterInfo
+import com.example.marvelapiapp.view.MainActivity
 import com.example.marvelapiapp.R
 import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.view.characterInfo.CharacterInfoFragment
