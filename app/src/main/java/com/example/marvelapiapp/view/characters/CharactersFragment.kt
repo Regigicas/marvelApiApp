@@ -8,22 +8,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.character.CharacterInfo
 import com.example.domain.model.response.UseCaseResponseStatus
-import com.example.marvelapiapp.view.MainActivity
+import com.example.marvelapiapp.view.main.MainActivity
 import com.example.marvelapiapp.R
 import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.databinding.FragmentCharactersLayoutBinding
 import com.example.marvelapiapp.databinding.canRequestMoreData
-import com.example.marvelapiapp.navigation.NavigationManager
 import com.example.marvelapiapp.view.base.BaseFragment
 import com.example.marvelapiapp.view.characters.adapter.CharactersAdapter
 import com.example.marvelapiapp.view.characters.listener.CharacterItemListener
 import com.example.marvelapiapp.viewmodel.characters.CharactersViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -163,10 +162,16 @@ class CharactersFragment : BaseFragment<FragmentCharactersLayoutBinding>(), Char
 
     private fun handleServiceError() {
         viewModel.notifyLoadFinished()
-        viewModel.handleServiceError(hasData)
+        viewModel.notifyServiceError()
+        if (hasData) {
+            findNavController().navigate(
+                CharactersFragmentDirections
+                    .actionCharactersFragmentToFullErrorFragment())
+        }
     }
 
     override fun onCharacterClicked(characterInfo: CharacterInfo) {
-        NavigationManager.navigateToCharacterDetail(characterInfo)
+        findNavController().navigate(CharactersFragmentDirections
+            .actionCharactersFragmentToCharacterInfoFragment(characterInfo, 0))
     }
 }

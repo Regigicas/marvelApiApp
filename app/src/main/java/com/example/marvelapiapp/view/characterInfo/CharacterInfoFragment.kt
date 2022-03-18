@@ -7,26 +7,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.character.CharacterInfo
 import com.example.domain.model.character.CharacterParamInfo
 import com.example.domain.model.response.UseCaseResponseStatus
-import com.example.marvelapiapp.view.MainActivity
+import com.example.marvelapiapp.view.main.MainActivity
 import com.example.marvelapiapp.R
 import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.databinding.FragmentCharacterInfoBinding
-import com.example.marvelapiapp.navigation.NavigationManager
 import com.example.marvelapiapp.view.base.BaseFragment
 import com.example.marvelapiapp.view.characterInfo.adapter.CharacterSectionAdapter
 import com.example.marvelapiapp.viewmodel.characterInfo.CharacterInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class CharacterInfoFragment : BaseFragment<FragmentCharacterInfoBinding>() {
     private val viewModel: CharacterInfoViewModel by viewModels()
     private val adapterList = mutableListOf<CharacterSectionAdapter?>(null, null, null, null)
+    private val args: CharacterInfoFragmentArgs by navArgs()
 
     override fun getViewModel(): ViewModel = viewModel
     override fun getFragmentName(): String = this::class.java.simpleName
@@ -46,12 +47,10 @@ class CharacterInfoFragment : BaseFragment<FragmentCharacterInfoBinding>() {
         super.onViewCreated(view, savedInstanceState)
         (activity as? MainActivity)?.setToolbarBackButtonVisible(true)
         initViews()
-        val argumentData = arguments?.getParcelable(CharactersConstant.CHARACTER_INFO_KEY) as? CharacterInfo
-        if (argumentData != null) {
-            handleServiceData(argumentData)
+        if (args.characterInfo != null) {
+            handleServiceData(args.characterInfo)
         } else {
-            val characterId = arguments?.getInt(CharactersConstant.CHARACTER_ID_KEY)
-            initCollector(characterId)
+            initCollector(args.characterId)
         }
     }
 
@@ -69,7 +68,9 @@ class CharacterInfoFragment : BaseFragment<FragmentCharacterInfoBinding>() {
             }
         } ?: run {
             if (viewModel.getCharacterState().value.data == null) {
-                NavigationManager.showErrorOverlay()
+                findNavController().navigate(
+                    CharacterInfoFragmentDirections
+                        .actionCharacterInfoFragmentToFullErrorFragment())
             }
         }
     }
@@ -91,8 +92,10 @@ class CharacterInfoFragment : BaseFragment<FragmentCharacterInfoBinding>() {
 
     private fun handleServiceError() {
         viewModel.notifyLoadFinished()
-        NavigationManager.popBack()
-        NavigationManager.showErrorOverlay()
+        findNavController().popBackStack()
+        findNavController().navigate(
+            CharacterInfoFragmentDirections
+                .actionCharacterInfoFragmentToFullErrorFragment())
     }
 
     override fun onDestroyView() {

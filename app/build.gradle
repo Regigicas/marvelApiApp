@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 apply from: "../dependencies.gradle"
@@ -80,6 +81,10 @@ dependencies {
     implementation libraries.retrofit
     implementation libraries.retrofitGson
     implementation libraries.okHttpInterceptor
+
+    // Navigation
+    implementation libraries.navigationGraph
+    implementation libraries.navigationGraphUi
 
     // Testing
     testImplementation testing.junit

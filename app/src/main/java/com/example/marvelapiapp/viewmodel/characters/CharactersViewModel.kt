@@ -10,7 +10,6 @@ import com.example.marvelapiapp.constant.CharactersConstant
 import com.example.marvelapiapp.databinding.setError
 import com.example.marvelapiapp.databinding.setFrom
 import com.example.marvelapiapp.databinding.setLoading
-import com.example.marvelapiapp.navigation.NavigationManager
 import com.example.marvelapiapp.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,12 +55,8 @@ class CharactersViewModel
         launchCollector(false)
     }
 
-    fun handleServiceError(hasData: Boolean) {
-        if (hasData) {
-            NavigationManager.showErrorOverlay()
-        } else {
-            _errorVisible.value = true
-        }
+    fun notifyServiceError() {
+        _errorVisible.value = true
     }
 
     fun refreshData() {

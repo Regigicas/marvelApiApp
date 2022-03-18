@@ -17,7 +17,10 @@ ext {
             retrofit: 'com.squareup.retrofit2:retrofit:2.9.0',
             retrofitGson: 'com.squareup.retrofit2:converter-gson:2.9.0',
             okHttpInterceptor: 'com.squareup.okhttp3:logging-interceptor:4.9.3',
-            coroutinesKtx: 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+            coroutinesKtx: 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0',
+            navigationGraph: 'androidx.navigation:navigation-fragment-ktx:2.4.1',
+            navigationGraphUi: 'androidx.navigation:navigation-ui-ktx:2.4.1'
+
     ]
 
     testing = [
