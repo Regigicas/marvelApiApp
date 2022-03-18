@@ -89,6 +89,7 @@ dependencies {
     // Testing
     testImplementation testing.junit
     testImplementation testing.mockk
+    testImplementation testing.coroutinesKtx
 }
 
 kapt {

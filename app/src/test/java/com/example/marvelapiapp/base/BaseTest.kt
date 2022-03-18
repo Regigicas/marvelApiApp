@@ -2,6 +2,10 @@ package com.example.marvelapiapp.base
 
 import io.mockk.clearAllMocks
 import io.mockk.unmockkAll
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 
@@ -10,6 +14,7 @@ abstract class BaseTest {
     @Before
     fun init() {
         destroy()
+        Dispatchers.setMain(StandardTestDispatcher())
         testInit()
     }
 
@@ -17,6 +22,7 @@ abstract class BaseTest {
     fun destroy() {
         clearAllMocks()
         unmockkAll()
+        Dispatchers.resetMain()
     }
 
     abstract fun testInit()

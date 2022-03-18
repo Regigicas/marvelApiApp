@@ -10,6 +10,7 @@ abstract class BaseTest {
     @Before
     fun init() {
         destroy()
+        testInit()
     }
 
     @After
@@ -17,4 +18,6 @@ abstract class BaseTest {
         clearAllMocks()
         unmockkAll()
     }
+
+    abstract fun testInit()
 }

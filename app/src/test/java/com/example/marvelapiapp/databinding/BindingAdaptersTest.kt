@@ -3,8 +3,7 @@ package com.example.marvelapiapp.databinding
 import android.view.View
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.common.characters.thumbnail.CharacterThumbnail
-import com.example.common.characters.thumbnail.ThumbnailAspectRatio
+import com.example.domain.constant.ThumbnailAspectRatio
 import com.example.marvelapiapp.base.BaseTest
 import com.squareup.picasso.Picasso
 import io.mockk.every
@@ -40,24 +39,7 @@ class BindingAdaptersTest : BaseTest() {
 
         val imageView = mockk<ImageView>(relaxed = true)
 
-        imageView.bindThumbnail(
-            CharacterThumbnail("https://www.google.es", "png"),
-            ThumbnailAspectRatio.LANDSCAPE_AMAZING)
-
-        val string = "https://www.google.es/landscape_amazing.png"
-        verify(exactly = 1) { picasso.load(string) }
-    }
-
-    @Test
-    fun `test bindImageUrl http`() {
-        val picasso = mockk<Picasso>(relaxed = true)
-        mockkStatic(Picasso::class)
-        every { Picasso.get() } returns picasso
-
-        val imageView = mockk<ImageView>(relaxed = true)
-
-        imageView.bindThumbnail(
-            CharacterThumbnail("http://www.google.es", "png"),
+        imageView.bindThumbnail("https://www.google.es/%s.png",
             ThumbnailAspectRatio.LANDSCAPE_AMAZING)
 
         val string = "https://www.google.es/landscape_amazing.png"

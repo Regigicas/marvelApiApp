@@ -1,25 +1,35 @@
 package com.example.marvelapiapp.viewmodel.characters
 
+import com.example.domain.model.character.CharacterInfo
+import com.example.domain.model.response.UseCaseResponse
+import com.example.domain.usecase.character.list.GetCharactersModel
+import com.example.domain.usecase.character.list.GetCharactersUseCaseImpl
 import com.example.marvelapiapp.base.BaseTest
-import com.example.marvelapiapp.constant.CharactersRequest
-import com.example.marvelapiapp.navigation.NavigationManager
-import com.example.marvelapiapp.repository.characters.CharactersRepository
+import com.example.marvelapiapp.databinding.setError
+import com.example.marvelapiapp.databinding.setFrom
+import com.example.marvelapiapp.databinding.setSuccess
+import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.justRun
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
 class CharactersViewModelTest : BaseTest() {
     private lateinit var viewModel: CharactersViewModel
-    private val repository = mockk<CharactersRepository>(relaxed = true)
+    private val useCase = mockk<GetCharactersUseCaseImpl>(relaxed = true)
+    private val flowMock =
+        mockk<MutableStateFlow<UseCaseResponse<List<CharacterInfo>>>>(relaxed = true)
 
     override fun testInit() {
-        viewModel = spyk(CharactersViewModel(repository), recordPrivateCalls = true)
+        viewModel = spyk(CharactersViewModel(useCase), recordPrivateCalls = true)
     }
 
     @Test
@@ -31,11 +41,11 @@ class CharactersViewModelTest : BaseTest() {
 
     @Test
     fun `test getCharacterState`() {
-        val privateState = viewModel.getTestValue<MutableStateFlow<CharactersRequest>>(
+        val privateState = viewModel.getTestValue<StateFlow<UseCaseResponse<List<CharacterInfo>>>>(
             "charactersFlow")
         val state = viewModel.getCharactersState()
 
-        Assert.assertEquals(privateState.value.type, state.value.type)
+        Assert.assertEquals(privateState.value.status, state.value.status)
         Assert.assertEquals(privateState.value.data, state.value.data)
     }
 
@@ -67,24 +77,14 @@ class CharactersViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `test handleServiceError`() {
-        mockkObject(NavigationManager)
-        justRun { NavigationManager.showErrorOverlay() }
+    fun `test notifyServiceError`() {
+        val privateState = viewModel.getTestValue<MutableStateFlow<Boolean>>(
+            "_errorVisible").value
+        viewModel.notifyServiceError()
+        val state = viewModel.errorVisible
 
-        viewModel.handleServiceError(false)
-
-        verify(exactly = 0) { NavigationManager.showErrorOverlay() }
-        Assert.assertEquals(true, viewModel.errorVisible.value)
-    }
-
-    @Test
-    fun `test handleServiceError has data`() {
-        mockkObject(NavigationManager)
-        justRun { NavigationManager.showErrorOverlay() }
-
-        viewModel.handleServiceError(true)
-
-        verify(exactly = 1) { NavigationManager.showErrorOverlay() }
+        Assert.assertEquals(false, privateState)
+        Assert.assertEquals(true, state.value)
     }
 
     @Test
@@ -105,23 +105,51 @@ class CharactersViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `test launchCollector`() {
+    fun `test launchCollector`() = runTest {
+        val dto = GetCharactersModel(20, 20)
+        val response = mockk<UseCaseResponse<List<CharacterInfo>>>(relaxed = true)
+        coEvery {
+            useCase.execute(dto, any(), any())
+        } coAnswers {
+            secondArg<(UseCaseResponse<List<CharacterInfo>>) -> Unit>().invoke(response)
+        }
+
         viewModel.setTestValue("currentOffset", 20)
+        viewModel.setTestValue("charactersFlow", flowMock)
+
         viewModel.callPrivateMethod<Unit>("launchCollector", false)
 
-        coVerify(exactly = 1) { repository.runCharactersCollector(any(), 20, 20) }
-        val offset = viewModel.getTestValue<Int>("currentOffset")
-        Assert.assertEquals(40, offset)
+        launch(Dispatchers.Main) {
+            coVerify(exactly = 1) { useCase.execute(dto, any(), any()) }
+            coVerify(exactly = 1) { viewModel.notifyLoadFinished() }
+            coVerify(exactly = 1) { flowMock.setFrom(response) }
+            val offset = viewModel.getTestValue<Int>("currentOffset")
+            Assert.assertEquals(40, offset)
+        }
     }
 
     @Test
-    fun `test launchCollector refresh`() {
+    fun `test launchCollector refresh`() = runTest {
+        val dto = GetCharactersModel(20, 0)
+        val throwable = mockk<Throwable>(relaxed = true)
+        coEvery {
+            useCase.execute(dto, any(), any())
+        } coAnswers {
+            thirdArg<(Throwable) -> Unit>().invoke(throwable)
+        }
+
         viewModel.setTestValue("currentOffset", 20)
+        viewModel.setTestValue("charactersFlow", flowMock)
+
         viewModel.callPrivateMethod<Unit>("launchCollector", true)
 
-        coVerify(exactly = 1) { repository.runCharactersCollector(any(), 20, 0) }
-        val offset = viewModel.getTestValue<Int>("currentOffset")
-        Assert.assertEquals(20, offset)
+        launch(Dispatchers.Main) {
+            coVerify(exactly = 1) { useCase.execute(dto, any(), any()) }
+            coVerify(exactly = 1) { viewModel.notifyLoadFinished() }
+            coVerify(exactly = 1) { flowMock.setError(throwable) }
+            val offset = viewModel.getTestValue<Int>("currentOffset")
+            Assert.assertEquals(0, offset)
+        }
     }
 
     @Test
