@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.marvelapiapp.viewmodel.characterInfo.CharacterInfoViewModel" />
+            type="com.example.marvelapiapp.presentation.characterInfo.CharacterInfoViewModel" />
         <import type="com.example.domain.constant.ThumbnailAspectRatio"/>
         <import type="com.example.marvelapiapp.util.EmptyOrNull"/>
     </data>

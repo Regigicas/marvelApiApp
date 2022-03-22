@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MarvelApiApp"
         android:name=".BaseApp">
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,8 +6,10 @@ import com.example.domain.repository.CharacterRepository
 import com.example.domain.usecase.base.BaseUseCase
 
 class GetCharactersUseCaseImpl(private val repository: CharacterRepository)
-    : GetCharactersUseCase, BaseUseCase<GetCharactersModel, UseCaseResponse<List<CharacterInfo>>>() {
+    : GetCharactersUseCase, BaseUseCase<GetCharactersUseCase.GetCharactersParams, UseCaseResponse<List<CharacterInfo>>>() {
 
-    override suspend fun run(params: GetCharactersModel): UseCaseResponse<List<CharacterInfo>> =
+    override suspend fun run(
+        params: GetCharactersUseCase.GetCharactersParams
+    ): UseCaseResponse<List<CharacterInfo>> =
         UseCaseResponse.success(repository.getCharacters(params.limit, params.offset))
 }

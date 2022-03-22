@@ -9,7 +9,7 @@
             type="com.example.domain.model.character.CharacterInfo" />
         <variable
             name="listener"
-            type="com.example.marvelapiapp.view.characters.listener.CharacterItemListener" />
+            type="com.example.marvelapiapp.presentation.characters.listener.CharacterItemListener" />
         <import type="com.example.domain.constant.ThumbnailAspectRatio"/>
     </data>
 

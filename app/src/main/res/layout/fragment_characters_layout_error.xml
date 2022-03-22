@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.marvelapiapp.viewmodel.characters.CharactersViewModel" />
+            type="com.example.marvelapiapp.presentation.characters.CharactersViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
